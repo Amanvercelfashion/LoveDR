@@ -8,6 +8,12 @@ CREATE TABLE profiles (
   email TEXT,
   display_name TEXT,
   avatar_id TEXT DEFAULT 'default',
+  skin_tone TEXT DEFAULT '#F1C27D',
+  hair_style TEXT DEFAULT 'short',
+  clothing_style TEXT DEFAULT 'casual',
+  height_range TEXT DEFAULT '5_5-5_9',
+  weight_range TEXT DEFAULT '60-70',
+  onboarding_complete BOOLEAN DEFAULT false,
   gender TEXT CHECK (gender IN ('male', 'female')),
   age INT CHECK (age >= 18),
   description TEXT,
@@ -98,6 +104,11 @@ RETURNS TABLE (
   id UUID,
   display_name TEXT,
   avatar_id TEXT,
+  skin_tone TEXT,
+  hair_style TEXT,
+  clothing_style TEXT,
+  height_range TEXT,
+  weight_range TEXT,
   age INT,
   rating DECIMAL(3,1),
   description TEXT,
@@ -127,7 +138,7 @@ BEGIN
   FROM profiles WHERE id = p_user_id;
 
   RETURN QUERY
-  SELECT p.id, p.display_name, p.avatar_id, p.age, p.rating, p.description, p.interests
+  SELECT p.id, p.display_name, p.avatar_id, p.skin_tone, p.hair_style, p.clothing_style, p.height_range, p.weight_range, p.age, p.rating, p.description, p.interests
   FROM profiles p
   WHERE p.id != p_user_id
     AND p.status = 'active'
@@ -196,3 +207,15 @@ BEGIN
   UPDATE profiles SET tokens = tokens + p_amount WHERE id = p_user_id;
 END;
 $$;
+
+-- ============================================
+-- Avatar System (run these ALTER statements if profiles table already exists)
+-- ============================================
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS skin_tone TEXT DEFAULT '#F1C27D';
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS hair_style TEXT DEFAULT 'short';
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS clothing_style TEXT DEFAULT 'casual';
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS height_range TEXT DEFAULT '5_5-5_9';
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS weight_range TEXT DEFAULT '60-70';
+-- ALTER TABLE profiles ADD COLUMN IF NOT EXISTS onboarding_complete BOOLEAN DEFAULT false;
+
+-- For fresh installs, these columns are included in the CREATE TABLE above

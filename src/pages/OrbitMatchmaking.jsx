@@ -3,6 +3,7 @@ import { useAuthStore } from '../store/authStore'
 import { supabase } from '../lib/supabase'
 import OrbitCircles from '../components/OrbitCircles'
 import MatchSlot from '../components/MatchSlot'
+import AvatarPreview, { HEIGHT_RANGES, WEIGHT_RANGES } from '../components/AvatarPreview'
 import { useNavigate } from 'react-router-dom'
 
 export default function OrbitMatchmaking() {
@@ -95,16 +96,21 @@ export default function OrbitMatchmaking() {
             padding: '2rem', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)',
             maxWidth: '320px'
           }}>
-            <div style={{
-              width: '80px', height: '80px', borderRadius: '50%',
-              background: '#302b63', margin: '0 auto 1rem', display: 'flex',
-              alignItems: 'center', justifyContent: 'center', fontSize: '2rem'
-            }}>
-              {matchResult.candidate.avatar_id?.[0]?.toUpperCase() || '?'}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
+              <AvatarPreview
+                skinTone={matchResult.candidate.skin_tone}
+                hairStyle={matchResult.candidate.hair_style}
+                clothingStyle={matchResult.candidate.clothing_style}
+                heightRange={matchResult.candidate.height_range}
+                weightRange={matchResult.candidate.weight_range}
+                size={100}
+              />
             </div>
             <h2 style={{ margin: '0 0 0.25rem' }}>{matchResult.candidate.display_name}</h2>
-            <div style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '0.5rem' }}>
+            <div style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '0.25rem', fontSize: '0.85rem' }}>
               Age: {matchResult.candidate.age} | Rating: {matchResult.candidate.rating}
+              {matchResult.candidate.height_range && ` | ${(HEIGHT_RANGES[matchResult.candidate.height_range] || {}).label || matchResult.candidate.height_range}`}
+              {matchResult.candidate.weight_range && ` | ${(WEIGHT_RANGES[matchResult.candidate.weight_range] || {}).label || matchResult.candidate.weight_range}`}
             </div>
             <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)', margin: '0.5rem 0' }}>
               {matchResult.candidate.description}

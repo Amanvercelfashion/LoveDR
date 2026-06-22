@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import AvatarPreview from './AvatarPreview'
 
 const OUTER_COUNT = 18
 const MEDIUM_COUNT = 8
@@ -84,9 +85,16 @@ export default function OrbitCircles({ candidates, selected, searching }) {
         }}
       >
         {selected ? (
-          <div style={{ fontSize: '0.625rem', opacity: 0.9 }}>
-            <div>{selected.display_name}</div>
-            <div style={{ fontSize: '0.5rem', opacity: 0.7 }}>Rating: {selected.rating}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <AvatarPreview
+              skinTone={selected.skin_tone}
+              hairStyle={selected.hair_style}
+              clothingStyle={selected.clothing_style}
+              heightRange={selected.height_range}
+              weightRange={selected.weight_range}
+              size={64}
+            />
+            <div style={{ fontSize: '0.5rem', marginTop: 2, opacity: 0.9 }}>{selected.display_name}</div>
           </div>
         ) : searching ? (
           <div style={{ fontSize: '0.5rem' }}>Searching...</div>
